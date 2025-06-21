@@ -1,11 +1,25 @@
+import { TOrder } from '@utils-types';
+
+export type TFeedInfoProps = {
+  feed: {
+    total: number;
+    totalToday: number;
+  };
+  readyOrders: TOrder[];
+  pendingOrders: TOrder[];
+};
+
 export type FeedInfoUIProps = {
-  feed: any;
-  readyOrders: number[];
-  pendingOrders: number[];
+  readyOrders: TOrder[];
+  pendingOrders: TOrder[];
+  feed: {
+    total: number;
+    totalToday: number;
+  };
 };
 
 export type HalfColumnProps = {
-  orders: number[];
+  orders: TOrder[];
   title: string;
   textColor?: string;
 };
