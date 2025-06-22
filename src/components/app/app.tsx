@@ -10,7 +10,9 @@ import {
   Profile,
   ProfileOrders,
   Feed,
-  NotFound404
+  NotFound404,
+  IngredientDetailsPage,
+  OrderInfoPage
 } from '@pages';
 
 import { AppHeader, IngredientDetails, OrderInfo, Modal } from '@components';
@@ -19,6 +21,7 @@ import { UnprotectedRoute } from '../unprotected-route/unprotected-route';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { getUser, setAuthChecked } from '../../services/slices/userSlice';
+import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 import { getCookie } from '../../utils/cookie';
 
 const App = () => {
@@ -26,6 +29,10 @@ const App = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { isAuthChecked } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
 
   useEffect(() => {
     const accessToken = getCookie('accessToken');
@@ -44,6 +51,9 @@ const App = () => {
       <main>
         <Routes location={background || location}>
           <Route path='/' element={<ConstructorPage />} />
+          <Route path='/feed' element={<Feed />} />
+          <Route path='/feed/:number' element={<OrderInfoPage />} />
+          <Route path='/ingredients/:id' element={<IngredientDetailsPage />} />
           <Route
             path='/login'
             element={
@@ -92,7 +102,14 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route path='/feed' element={<Feed />} />
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <ProtectedRoute>
+                <OrderInfoPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path='*' element={<NotFound404 />} />
         </Routes>
 
@@ -101,7 +118,7 @@ const App = () => {
             <Route
               path='/ingredients/:id'
               element={
-                <Modal title='Детали ингредиента' onClose={() => navigate('/')}>
+                <Modal title='Детали ингредиента' onClose={() => navigate(-1)}>
                   <IngredientDetails />
                 </Modal>
               }
@@ -109,10 +126,7 @@ const App = () => {
             <Route
               path='/feed/:number'
               element={
-                <Modal
-                  title='Информация о заказе'
-                  onClose={() => navigate('/feed')}
-                >
+                <Modal title='Информация о заказе' onClose={() => navigate(-1)}>
                   <OrderInfo />
                 </Modal>
               }
@@ -123,7 +137,7 @@ const App = () => {
                 <ProtectedRoute>
                   <Modal
                     title='Информация о заказе'
-                    onClose={() => navigate('/profile/orders')}
+                    onClose={() => navigate(-1)}
                   >
                     <OrderInfo />
                   </Modal>

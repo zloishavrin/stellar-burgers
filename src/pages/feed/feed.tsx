@@ -4,7 +4,6 @@ import { TOrder } from '@utils-types';
 import { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from '../../services/store';
 import { fetchFeeds } from '../../services/slices/feedSlice';
-import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
@@ -14,12 +13,10 @@ export const Feed: FC = () => {
 
   useEffect(() => {
     dispatch(fetchFeeds());
-    dispatch(fetchIngredients());
   }, [dispatch]);
 
   const handleGetFeeds = () => {
     dispatch(fetchFeeds());
-    dispatch(fetchIngredients());
   };
 
   if (loading) {

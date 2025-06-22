@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from '../../services/store';
 import { fetchUserOrders } from '../../services/slices/feedSlice';
 import { ProfileOrdersUI } from '@ui-pages';
 import { FC } from 'react';
-import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 import { Preloader } from '@ui';
 
 export const ProfileOrders: FC = () => {
@@ -14,7 +13,6 @@ export const ProfileOrders: FC = () => {
 
   useEffect(() => {
     dispatch(fetchUserOrders());
-    dispatch(fetchIngredients());
   }, [dispatch]);
 
   if (loading) {
