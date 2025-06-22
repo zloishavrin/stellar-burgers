@@ -1,14 +1,17 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from '../../services/store';
+import { useDispatch } from '../../services/store';
 import { loginUserApi } from '@api';
 import { setCookie } from '../../utils/cookie';
 import { LoginUI } from '@ui-pages';
 import { setUser, setAuthenticated } from '../../services/slices/userSlice';
+import { useForm } from '../../hooks/useForm';
 
 export const Login: FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { values, handleChange } = useForm({
+    email: '',
+    password: ''
+  });
   const [error, setError] = useState<string>('');
 
   const dispatch = useDispatch();
@@ -22,7 +25,7 @@ export const Login: FC = () => {
     dispatch(setUser(null));
     dispatch(setAuthenticated(false));
 
-    loginUserApi({ email, password })
+    loginUserApi(values)
       .then((data) => {
         localStorage.setItem('refreshToken', data.refreshToken);
         setCookie('accessToken', data.accessToken);
@@ -41,11 +44,10 @@ export const Login: FC = () => {
   return (
     <LoginUI
       errorText={error}
-      email={email}
-      password={password}
-      setEmail={setEmail}
-      setPassword={setPassword}
+      email={values.email}
+      password={values.password}
       handleSubmit={handleSubmit}
+      handleInputChange={handleChange}
     />
   );
 };

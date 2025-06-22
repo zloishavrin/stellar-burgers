@@ -1,14 +1,15 @@
 import { ProfileUI } from '@ui-pages';
-import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { FC, SyntheticEvent, useEffect } from 'react';
 import { useSelector, useDispatch } from '../../services/store';
 import { TRegisterData, updateUserApi } from '@api';
 import { TUser } from '@utils-types';
+import { useForm } from '../../hooks/useForm';
 
 export const Profile: FC = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user) as TUser | null;
 
-  const [formValue, setFormValue] = useState({
+  const { values, handleChange, setValues } = useForm({
     name: user?.name || '',
     email: user?.email || '',
     password: ''
@@ -16,33 +17,33 @@ export const Profile: FC = () => {
 
   useEffect(() => {
     if (user) {
-      setFormValue((prevState) => ({
-        ...prevState,
+      setValues({
+        ...values,
         name: user.name,
         email: user.email,
         password: ''
-      }));
+      });
     }
-  }, [user]);
+  }, [user, setValues]);
 
   const isFormChanged =
-    formValue.name !== user?.name ||
-    formValue.email !== user?.email ||
-    !!formValue.password;
+    values.name !== user?.name ||
+    values.email !== user?.email ||
+    !!values.password;
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
     const updateData: Partial<TRegisterData> = {};
-    if (formValue.name !== user?.name) updateData.name = formValue.name;
-    if (formValue.email !== user?.email) updateData.email = formValue.email;
-    if (formValue.password) updateData.password = formValue.password;
+    if (values.name !== user?.name) updateData.name = values.name;
+    if (values.email !== user?.email) updateData.email = values.email;
+    if (values.password) updateData.password = values.password;
 
     if (Object.keys(updateData).length > 0) {
       updateUserApi(updateData)
         .then((data) => {
           dispatch({ type: 'user/setUser', payload: data.user });
-          setFormValue((prev) => ({ ...prev, password: '' }));
+          setValues({ ...values, password: '' });
         })
         .catch((err) => {
           console.error('Ошибка обновления профиля:', err);
@@ -53,27 +54,20 @@ export const Profile: FC = () => {
 
   const handleCancel = (e: SyntheticEvent) => {
     e.preventDefault();
-    setFormValue({
+    setValues({
       name: user?.name || '',
       email: user?.email || '',
       password: ''
     });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValue((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value
-    }));
-  };
-
   return (
     <ProfileUI
-      formValue={formValue}
+      formValue={values}
       isFormChanged={isFormChanged}
       handleCancel={handleCancel}
       handleSubmit={handleSubmit}
-      handleInputChange={handleInputChange}
+      handleInputChange={handleChange}
     />
   );
 };

@@ -1,6 +1,5 @@
 import { PageUIProps } from '../common-type';
 
-export type LoginUIProps = PageUIProps & {
+export type ForgotPasswordUIProps = PageUIProps & {
   email: string;
-  password: string;
 };
