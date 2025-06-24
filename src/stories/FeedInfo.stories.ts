@@ -4,10 +4,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 const meta = {
   title: 'Example/FeedInfo',
   component: FeedInfoUI,
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
   parameters: {
-    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
     layout: 'fullscreen'
   }
 } satisfies Meta<typeof FeedInfoUI>;
@@ -18,23 +16,39 @@ type Story = StoryObj<typeof meta>;
 export const DefaultFeedInfo: Story = {
   args: {
     feed: {
-      orders: [
-        {
-          _id: '11111',
-          status: 'ready',
-          name: 'Burger',
-          createdAt: '',
-          updatedAt: '',
-          number: 123,
-          ingredients: ['Булка', 'Начинка']
-        }
-      ],
       total: 12,
-      totalToday: 2,
-      isLoading: false,
-      error: null
+      totalToday: 2
     },
-    readyOrders: [123, 124, 125],
-    pendingOrders: [126, 127]
+    readyOrders: [
+      {
+        _id: '1',
+        name: 'Burger',
+        status: 'done',
+        number: 123,
+        createdAt: '2024-01-01T12:00:00.000Z',
+        updatedAt: '2024-01-01T12:00:00.000Z',
+        ingredients: []
+      },
+      {
+        _id: '2',
+        name: 'Burger 2',
+        status: 'done',
+        number: 124,
+        createdAt: '2024-01-01T12:00:00.000Z',
+        updatedAt: '2024-01-01T12:00:00.000Z',
+        ingredients: []
+      }
+    ],
+    pendingOrders: [
+      {
+        _id: '3',
+        name: 'Burger 3',
+        status: 'pending',
+        number: 125,
+        createdAt: '2024-01-01T12:00:00.000Z',
+        updatedAt: '2024-01-01T12:00:00.000Z',
+        ingredients: []
+      }
+    ]
   }
 };

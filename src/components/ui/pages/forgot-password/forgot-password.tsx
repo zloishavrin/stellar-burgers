@@ -1,15 +1,14 @@
 import { FC } from 'react';
-
+import { Link } from 'react-router-dom';
 import { Input, Button } from '@zlden/react-developer-burger-ui-components';
 import styles from '../common.module.css';
-import { Link } from 'react-router-dom';
-import { PageUIProps } from '../common-type';
+import { ForgotPasswordUIProps } from './type';
 
-export const ForgotPasswordUI: FC<PageUIProps> = ({
+export const ForgotPasswordUI: FC<ForgotPasswordUIProps> = ({
   errorText,
   email,
-  setEmail,
-  handleSubmit
+  handleSubmit,
+  handleInputChange
 }) => (
   <main className={styles.container}>
     <div className={`pt-6 ${styles.wrapCenter}`}>
@@ -23,12 +22,14 @@ export const ForgotPasswordUI: FC<PageUIProps> = ({
           <Input
             type='email'
             placeholder='Укажите e-mail'
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleInputChange}
             value={email}
             name='email'
             error={false}
             errorText=''
             size='default'
+            onPointerEnterCapture={() => {}}
+            onPointerLeaveCapture={() => {}}
           />
         </div>
         <div className={`pb-6 ${styles.button}`}>
@@ -42,9 +43,9 @@ export const ForgotPasswordUI: FC<PageUIProps> = ({
           </p>
         )}
       </form>
-      <div className={`${styles.question} text text_type_main-default pb-6`}>
+      <div className={`pb-4 ${styles.question} text text_type_main-default`}>
         Вспомнили пароль?
-        <Link to={'/login'} className={`pl-2 ${styles.link}`}>
+        <Link to='/login' className={`pl-2 ${styles.link}`}>
           Войти
         </Link>
       </div>
